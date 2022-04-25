@@ -11,28 +11,29 @@ template <typename T> class Array {
  public:
     Array(int N=5);
     Array(T *, int);
-    Array(const Array &x);
-    Array & operator = (const Array &x);
+    Array(const Array <T>&x);
+    Array <T>& operator = (const Array <T>&x);
      ~Array();
     void Scan(int m=5);
     T & operator [] (int i);
     void Print();
-    int FindKey(int key);
-     Array & operator += (int key);
-     Array operator +(int key);
-     Array operator + (Array &X);
-     Array & operator +=(Array &x);
-     Array & operator -=(int key);
-     Array operator -(int key);
-     Array & DelPosEq(int pos);
-     Array & DelPosNew(int pos);
-     bool operator == (Array &x);
-     bool operator != (Array &x);
+    int FindKey(T key);
+     Array <T>& operator += (int key);
+     Array <T> operator +(int key);
+     Array <T> operator + (Array <T>&X);
+     Array <T>& operator +=(Array <T>&x);
+     Array <T>& operator -=(T key);
+     Array <T> operator -(T key);
+     Array <T>& DelPosEq(int pos);
+     Array <T>& DelPosNew(int pos);
+     bool operator == (Array <T>&x);
+     bool operator != (Array <T>&x);
     int Max();
     int Min();
     void Sort();
-    friend ostream & operator << (ostream &r, Array &x);
-    friend istream & operator >> (istream &r, Array &x);
+    template <typename U> friend ostream& operator << (ostream& r, Array <U>& x);
+    template <typename U> friend istream& operator >> (istream& r, Array <U>& x);    
+ 
     void ShiftLeft(int pos);
     int getN();
 };
@@ -110,7 +111,7 @@ template <typename T> T & Array<T>::operator [] (int i){
 }
 
 template <typename T> Array<T> & Array<T>::operator += (int key){
-   int *temp = new T[n + 1];
+   T *temp = new T[n + 1];
    for(int i =0; i < n; i ++){
      temp[i] = a[i];
    }
@@ -172,7 +173,7 @@ template <typename T> int Array<T>::Min(){
  return min_num;
 }
 
-template <typename T>int Array<T>::FindKey (int key){
+template <typename T>int Array<T>::FindKey (T key){
     for(int i =0; i < n; i++){
         if(a[i] == key)return i;
     }
@@ -200,7 +201,7 @@ template <typename T> bool Array<T>::operator != (Array &X){
     }
 }
 
-template <typename T> Array<T> & Array<T>::operator -= (int key){
+template <typename T> Array<T>& Array<T>::operator-= (T key){
     int i, j = 0, found = 0;
     for(i = 0; i < n; i++){
         if(a[i] != key){
@@ -220,9 +221,9 @@ template <typename T> Array<T> & Array<T>::operator -= (int key){
     return *this;
 }
 
-template <typename T> Array<T> & Array<T>::operator += (Array &X){
+template <typename T> Array<T> & Array<T>::operator += (Array <T> &X){
     int i, j = 0;
-    int * newArray = new T[n+X.n];
+    T * newArray = new T[n+X.n];
     for(i = 0; i < n + X.n; i++){
         if( i < n ){
             newArray[i] = a[i];
@@ -250,21 +251,22 @@ template <typename T> Array<T> & Array<T>::DelPosEq(int pos){
     }
   }
    if(found == 0){
-       cout <<"The number with the index ("<< pos <<") does not exist!"<<endl;
+       cout <<"The number/character with the index ("<< pos <<") does not exist!"<<endl;
     }else {
-       cout <<"The number with the index ("<< pos <<") deleted successfully."<<endl;
+       cout <<"The number/character with the index ("<< pos <<") deleted successfully."<<endl;
     }
     return *this;
 }
-template <typename T> Array<T> & Array<T>::DelPosNew( int pos){
-    int i, j=0, * b;
+template <typename T> Array<T> & Array<T>::DelPosNew(int pos){
+    int i, j=0;
+    T * b;
     if(pos >=0 && pos < n){
         b = new T[n-1];
         for(i = 0; i < n; i++){
             if(pos != i){ b[j++] = a[i];};
         }
     }else{
-        b = new int [n];
+        b = new T[n];
         for(i = 0; i < n; i++)b[i] = a[i];
        cout <<"The number with the index ("<< pos <<") does not exist!"<<endl;
     }
@@ -283,8 +285,7 @@ template <typename T> void Array<T>::Sort(){
        }
    }
 }
-
-template <typename T> ostream & operator << (ostream &r, Array<T> &X){
+template <typename T> ostream & operator << (ostream& r, Array<T>& X){
      for(int i = 0; i < X.n; i++){
             cout<< X.a[i] << ' ';
         }
@@ -304,7 +305,7 @@ template <typename T> istream & operator >> (istream &r, Array<T> &X){
        }
     }else {
       delete []X.a;
-      X.a = new int[m];
+      X.a = new T[m];
       for(int i = 0; i < m; i++){
           cin >> X.a[i];
       }
